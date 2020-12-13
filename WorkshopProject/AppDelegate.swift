@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,10 +15,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        let configuration = ParseClientConfiguration {
+            $0.applicationId = "lHVdHK1shndAPmRHVR959RgikwwsGq0Ys1KzGqvK"
+            $0.clientKey = "xLhokmVix1amkFxoQq6mssMciVld2W7qO33oehxM"
+            $0.server = "https://parseapi.back4app.com/"
+        }
+        Parse.initialize(with: configuration)
+        //saveInstallationObject()
         return true
     }
-
+    
+    func saveInstallationObject()
+    {
+        if let installation = PFInstallation.current()
+        {
+            installation.saveInBackground(block: {
+                  (succsess: Bool, error: Error?) in
+                if(succsess)
+                {
+                    print("You have been connected!")
+                }
+                else
+                {
+                    if let myError = error {
+                        print(myError.localizedDescription)
+                    }
+                    else
+                    {
+                        print("Unknown error.")
+                    }
+                }
+            })
+        }
+    }
+    
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
